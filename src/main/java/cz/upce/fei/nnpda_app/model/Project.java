@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
-@Table(name = "projects")
+@Table(name = "app_projects")
 @NoArgsConstructor
 public class Project {
     @Id
@@ -19,12 +21,16 @@ public class Project {
     @Column(unique = true)
     private String name;
 
-    @Nonnull
     private String description;
 
-    @Nonnull
-    private ProjectStatus active;
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus active = ProjectStatus.ACTIVE;
 
-    //USER
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
 
 }

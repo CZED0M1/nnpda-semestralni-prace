@@ -56,11 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
 
-        System.out.println("Authorization header: " + authHeader);
-        System.out.println("Extrahovaný username z tokenu: " + username);
-        System.out.println("Valid token? " + jwtUtil.validateToken(jwt));
-
-
         filterChain.doFilter(request, response);
     }
 }

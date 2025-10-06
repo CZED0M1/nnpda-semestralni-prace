@@ -18,16 +18,6 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("DataInitializer executed");
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword("admin");
-        user.setEmail("rob@rob.cz");
-        if (userRepository.findByUsername("admin").isEmpty()) {
-            log.info("Creating user");
-            userRepository.save(user);
-        }
-
-        List<User> users = userRepository.findAll();
 
     }
 }

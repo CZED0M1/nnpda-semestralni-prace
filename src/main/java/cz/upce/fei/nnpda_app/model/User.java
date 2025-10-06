@@ -1,6 +1,6 @@
 package cz.upce.fei.nnpda_app.model;
 
-import cz.upce.fei.nnpda_app.dto.UserResponseDto;
+import cz.upce.fei.nnpda_app.dto.User.UserResponseDto;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Data;

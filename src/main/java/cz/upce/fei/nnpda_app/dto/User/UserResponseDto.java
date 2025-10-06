@@ -1,6 +1,5 @@
-package cz.upce.fei.nnpda_app.dto;
+package cz.upce.fei.nnpda_app.dto.User;
 
-import jakarta.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

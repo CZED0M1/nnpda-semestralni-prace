@@ -1,5 +1,6 @@
 package cz.upce.fei.nnpda_app.model;
 
+import cz.upce.fei.nnpda_app.dto.Ticket.TicketResponseDto;
 import cz.upce.fei.nnpda_app.enums.TicketPriority;
 import cz.upce.fei.nnpda_app.enums.TicketStatus;
 import cz.upce.fei.nnpda_app.enums.TicketType;
@@ -35,4 +36,8 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    public TicketResponseDto toDto() {
+        return new TicketResponseDto(this.id, this.title,this.type, this.priority, this.status);
+    }
 }

@@ -5,12 +5,12 @@ import cz.upce.fei.nnpda_app.dto.User.UserChangePasswordDto;
 import cz.upce.fei.nnpda_app.dto.User.UserRequestDto;
 import cz.upce.fei.nnpda_app.dto.User.UserRequestPasswordDto;
 import cz.upce.fei.nnpda_app.dto.User.UserRequestResetDto;
+import cz.upce.fei.nnpda_app.exception.NotFoundException;
 import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,9 +32,7 @@ public class UserService {
     public String login(String username, String password) throws AuthenticationException {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Uživatel s username " + username + " nenalezen"
-                ));
+                .orElseThrow(() -> new NotFoundException("Uživatel '" + username + "' nebyl nalezen."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationException("Neplatné heslo");
@@ -86,12 +84,11 @@ public class UserService {
 
     public void changePassword(UserChangePasswordDto reqUser) throws AuthenticationException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info(user.getUsername());
         if(passwordEncoder.matches(reqUser.getNewPassword(), user.getPassword())){
             throw new IllegalArgumentException("New password is same as old password");
         }
 
-        login(user.getUsername(), reqUser.getNewPassword());
+        login(user.getUsername(), reqUser.getOldPassword());
         user.setPassword(passwordEncoder.encode(reqUser.getNewPassword()));
         login(user.getUsername(), reqUser.getOldPassword());
         user.setPassword(passwordEncoder.encode(reqUser.getNewPassword()));

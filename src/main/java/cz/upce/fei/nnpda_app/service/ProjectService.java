@@ -3,8 +3,10 @@ package cz.upce.fei.nnpda_app.service;
 import cz.upce.fei.nnpda_app.dto.Project.ProjectRequestDto;
 import cz.upce.fei.nnpda_app.dto.Project.ProjectRequestUpdateDto;
 import cz.upce.fei.nnpda_app.dto.Project.ProjectResponseDto;
+import cz.upce.fei.nnpda_app.exception.NotFoundException;
 import cz.upce.fei.nnpda_app.exception.OwnershipException;
 import cz.upce.fei.nnpda_app.model.Project;
+import cz.upce.fei.nnpda_app.model.Ticket;
 import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.repository.ProjectRepository;
 import lombok.AllArgsConstructor;
@@ -25,8 +27,8 @@ public class ProjectService {
     }
 
     public ProjectResponseDto findProjectById(Long id,User user) {
-        Project project = projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
-    if (!project.getUser().getId().equals(user.getId())) {
+        Project project = this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException("Project not found"));
+        if (!project.getUser().getId().equals(user.getId())) {
             throw new OwnershipException("Project is not yours");
         }
     return project.toResponseDto();
@@ -38,14 +40,14 @@ public class ProjectService {
     }
 
     public void deleteProject(Long id,User user) {
-        Project project = projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
+        Project project = this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException("Project not found"));
         if (!project.getUser().getId().equals(user.getId())) {
             throw new OwnershipException("Project is not yours");
         }
         projectRepository.delete(project);
     }
     public Project updateProject(Long id, ProjectRequestUpdateDto projectDto, User user) {
-        Project project = projectRepository.findById(id).orElseThrow(() -> new RuntimeException("Project not found"));
+        Project project = this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException("Project not found"));
         if (!project.getUser().getId().equals(user.getId())) {
             throw new OwnershipException("Project is not yours");
         }

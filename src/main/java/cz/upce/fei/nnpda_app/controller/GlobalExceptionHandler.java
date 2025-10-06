@@ -1,9 +1,9 @@
 package cz.upce.fei.nnpda_app.controller;
 
 import cz.upce.fei.nnpda_app.exception.OwnershipException;
+import cz.upce.fei.nnpda_app.exception.NotFoundException;
 import cz.upce.fei.nnpda_app.exception.WorkflowException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,10 +34,10 @@ public class GlobalExceptionHandler {
         return Map.of("error", errorMessage);
     }
 
-    // 404 - Entita nenalezena
-    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
+    // 404 - Uživatel nenalezen
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleNotFoundException(ChangeSetPersister.NotFoundException ex) {
+    public Map<String, String> handleUserNotFound(NotFoundException ex) {
         return Map.of("error", ex.getMessage());
     }
 

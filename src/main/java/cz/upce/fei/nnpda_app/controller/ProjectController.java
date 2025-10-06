@@ -6,6 +6,7 @@ import cz.upce.fei.nnpda_app.dto.Project.ProjectResponseDto;
 import cz.upce.fei.nnpda_app.model.Project;
 import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.service.ProjectService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createProject(@RequestBody ProjectRequestDto projectRequestDto) {
+    public ResponseEntity<?> createProject(@Valid @RequestBody ProjectRequestDto projectRequestDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project project = projectService.createProject(projectRequestDto, user);
         log.info("Project created: {}", project);
@@ -46,7 +47,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestBody ProjectRequestUpdateDto projectRequestDto) {
+    public ResponseEntity<?> updateProject(@PathVariable Long id,@Valid @RequestBody ProjectRequestUpdateDto projectRequestDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project project = projectService.updateProject(id, projectRequestDto, user);
         log.info("Project updated: {}", project);

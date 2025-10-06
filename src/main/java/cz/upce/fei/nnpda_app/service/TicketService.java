@@ -3,6 +3,7 @@ package cz.upce.fei.nnpda_app.service;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketRequestDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketResponseDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketUpdateDto;
+import cz.upce.fei.nnpda_app.exception.NotFoundException;
 import cz.upce.fei.nnpda_app.exception.OwnershipException;
 import cz.upce.fei.nnpda_app.model.Project;
 import cz.upce.fei.nnpda_app.model.Ticket;
@@ -10,6 +11,7 @@ import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.repository.ProjectRepository;
 import cz.upce.fei.nnpda_app.repository.TicketRepository;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.NotFound;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +27,14 @@ public class TicketService {
 
 
     public List<TicketResponseDto> findAllTicketsByProjectId(long projectId, User user) {
-        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
+        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
             throw new OwnershipException("Project is not yours");
         }
         return project.getTickets().stream().map(Ticket::toDto).collect(Collectors.toList());
     }
 
-    public TicketResponseDto createTicket(long projectId, TicketRequestDto ticketDto, User user) {
-        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+    public TicketResponseDto createTicket(long projectId, TicketRequestDto ticketDto, User user) throws ChangeSetPersister.NotFoundException {
+        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
         if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
             throw new OwnershipException("Project is not yours");
         }
@@ -49,8 +50,8 @@ public class TicketService {
     }
 
     public TicketResponseDto findTicketById(long ticketId, long projectId, User user) throws ChangeSetPersister.NotFoundException {
-        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundException("Ticket not found"));
+        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
         if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
             throw new OwnershipException("Project is not yours");
         }
@@ -62,13 +63,8 @@ public class TicketService {
     }
 
     public void deleteTicketById(long projectId, long ticketId, User user) throws ChangeSetPersister.NotFoundException {
-
-        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(
-                ChangeSetPersister.NotFoundException::new
-        );
-
-        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
+        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundException("Ticket not found"));
+        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
             throw new OwnershipException("Project is not yours");
         }
 
@@ -79,8 +75,8 @@ public class TicketService {
     }
 
     public TicketResponseDto updateTicketById(long projectId, long ticketId, TicketUpdateDto ticketDto, User user) throws ChangeSetPersister.NotFoundException {
-        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        Project project = this.projectRepository.findById(projectId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundException("Ticket not found"));
+        Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
         if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
             throw new OwnershipException("Project is not yours");
         }

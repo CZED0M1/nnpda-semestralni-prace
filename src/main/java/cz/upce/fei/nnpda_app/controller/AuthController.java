@@ -60,7 +60,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody UserChangePasswordDto user) throws AuthenticationException {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody UserChangePasswordDto user) throws AuthenticationException {
        userService.changePassword(user);
          log.info("Password changed for user {}", user);
         return ResponseEntity.ok("Heslo bylo úspěšně změněno.");

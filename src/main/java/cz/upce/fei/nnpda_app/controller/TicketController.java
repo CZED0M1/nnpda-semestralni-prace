@@ -5,6 +5,7 @@ import cz.upce.fei.nnpda_app.dto.Ticket.TicketResponseDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketUpdateDto;
 import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.service.TicketService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -30,7 +31,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketResponseDto> createTicket(@PathVariable Long projectId,@RequestBody TicketRequestDto ticketRequest) {
+    public ResponseEntity<TicketResponseDto> createTicket(@PathVariable Long projectId,@Valid @RequestBody TicketRequestDto ticketRequest) throws ChangeSetPersister.NotFoundException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TicketResponseDto ticket = ticketService.createTicket(projectId,ticketRequest,user);
         log.info("Ticket created: {}", ticket);
@@ -46,7 +47,7 @@ public class TicketController {
     }
 
     @PutMapping("/{ticketId}")
-    public ResponseEntity<TicketResponseDto> updateTicket(@PathVariable Long projectId,@PathVariable Long ticketId,@RequestBody TicketUpdateDto ticketRequest) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<TicketResponseDto> updateTicket(@PathVariable Long projectId,@PathVariable Long ticketId,@Valid @RequestBody TicketUpdateDto ticketRequest) throws ChangeSetPersister.NotFoundException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TicketResponseDto ticket = ticketService.updateTicketById(projectId, ticketId, ticketRequest, user);
         log.info("Ticket updated: {}", ticket);

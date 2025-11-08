@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -34,9 +35,12 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "project",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     public ProjectResponseDto toResponseDto() {
 
-    return new ProjectResponseDto(this.id, this.name, this.description, this.status);
+    return new ProjectResponseDto(this.id, this.name, this.description, this.status, comments);
     }
 
 }

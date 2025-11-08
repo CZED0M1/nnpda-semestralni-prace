@@ -1,7 +1,10 @@
 package cz.upce.fei.nnpda_app.dto.Project;
 
+import cz.upce.fei.nnpda_app.model.Comment;
 import cz.upce.fei.nnpda_app.model.Project;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ProjectRequestDto {

@@ -6,7 +6,6 @@ import cz.upce.fei.nnpda_app.dto.Project.ProjectResponseDto;
 import cz.upce.fei.nnpda_app.exception.NotFoundException;
 import cz.upce.fei.nnpda_app.exception.OwnershipException;
 import cz.upce.fei.nnpda_app.model.Project;
-import cz.upce.fei.nnpda_app.model.Ticket;
 import cz.upce.fei.nnpda_app.model.User;
 import cz.upce.fei.nnpda_app.repository.ProjectRepository;
 import lombok.AllArgsConstructor;
@@ -20,10 +19,10 @@ import java.util.stream.Collectors;
 public class ProjectService {
     ProjectRepository projectRepository;
 
-    public Project createProject(ProjectRequestDto projectDto, User user) {
+    public ProjectResponseDto createProject(ProjectRequestDto projectDto, User user) {
         Project project = projectDto.toProject();
         project.setUser(user);
-        return projectRepository.save(project);
+        return projectRepository.save(project).toResponseDto();
     }
 
     public ProjectResponseDto findProjectById(Long id,User user) {

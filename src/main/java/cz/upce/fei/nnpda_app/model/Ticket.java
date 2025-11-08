@@ -9,6 +9,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @Entity
 @Table(name = "app_tickets")
@@ -37,7 +41,19 @@ public class Ticket {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    @OneToMany(mappedBy = "ticket",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToOne
+    @JoinColumn(name = "assigned_user_id")
+    private User assignedUser;
+
+    private LocalDateTime updated = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<TicketChange> ticketChanges;
+
     public TicketResponseDto toDto() {
-        return new TicketResponseDto(this.id, this.title,this.type, this.priority, this.status);
+        return new TicketResponseDto(this.id, this.title,this.type, this.priority, this.status,this.updated,this.comments);
     }
 }

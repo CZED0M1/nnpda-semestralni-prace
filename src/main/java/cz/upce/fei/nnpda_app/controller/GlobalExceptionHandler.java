@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        String errorMessage = ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
         return Map.of("error", errorMessage);
     }
 

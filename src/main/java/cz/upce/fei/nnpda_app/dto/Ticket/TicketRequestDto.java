@@ -2,8 +2,11 @@ package cz.upce.fei.nnpda_app.dto.Ticket;
 
 import cz.upce.fei.nnpda_app.enums.TicketPriority;
 import cz.upce.fei.nnpda_app.enums.TicketType;
+import cz.upce.fei.nnpda_app.model.Comment;
 import cz.upce.fei.nnpda_app.model.Ticket;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class TicketRequestDto {

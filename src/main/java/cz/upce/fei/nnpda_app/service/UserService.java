@@ -76,6 +76,7 @@ public class UserService {
                 throw new IllegalArgumentException("Token je neplatný nebo vypršel");
             }
             u.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
+            //delete token after use
             userRepository.save(u);
             log.info("Password reset token for user {}", u.getUsername());
         });

@@ -1,9 +1,11 @@
 package cz.upce.fei.nnpda_app.controller;
 
+import cz.upce.fei.nnpda_app.dto.Ticket.TicketChange.TicketChangeResponseDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketRequestDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketResponseDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketUpdateDto;
 import cz.upce.fei.nnpda_app.model.User;
+import cz.upce.fei.nnpda_app.service.TicketChangeService;
 import cz.upce.fei.nnpda_app.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TicketController {
     private final TicketService ticketService;
+    private final TicketChangeService ticketChangeService;
 
     @GetMapping
     public ResponseEntity<List<TicketResponseDto>> getAllTickets(@PathVariable Long projectId) {
@@ -41,9 +44,16 @@ public class TicketController {
     @GetMapping("/{ticketId}")
     public ResponseEntity<TicketResponseDto> getTicketById(@PathVariable Long projectId,@PathVariable Long ticketId) throws ChangeSetPersister.NotFoundException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        TicketResponseDto ticket = ticketService.findTicketById(projectId, ticketId, user);
+        TicketResponseDto ticket = ticketService.findTicketById(ticketId, projectId, user);
         log.info("Ticket found: {}", ticket);
         return ResponseEntity.ok(ticket);
+    }
+
+    @GetMapping("/{ticketId}/changes")
+    public ResponseEntity<List<TicketChangeResponseDto>> getTicketChangesById(@PathVariable Long projectId,@PathVariable Long ticketId){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<TicketChangeResponseDto> changes = ticketChangeService.findByTicket(ticketId,user);
+        return ResponseEntity.ok(changes);
     }
 
     @PutMapping("/{ticketId}")

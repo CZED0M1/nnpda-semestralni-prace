@@ -33,9 +33,9 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<?> createProject(@Valid @RequestBody ProjectRequestDto projectRequestDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Project project = projectService.createProject(projectRequestDto, user);
+        ProjectResponseDto project = projectService.createProject(projectRequestDto, user);
         log.info("Project created: {}", project);
-        return ResponseEntity.ok().body(project.toResponseDto());
+        return ResponseEntity.ok().body(project);
     }
 
     @GetMapping("/{id}")

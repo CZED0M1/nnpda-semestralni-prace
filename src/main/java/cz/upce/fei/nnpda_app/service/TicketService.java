@@ -59,9 +59,8 @@ public class TicketService {
         Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundException("Ticket not found"));
         Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
         TicketChange ticketChange = this.ticketChangeRepository.findByTicketId(ticket.getId()).getFirst();
-        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
+        if (!(Objects.equals(project.getUser().getId(), user.getId())) && !Objects.equals(ticket.getAssignedUser().getId(), user.getId())) {
             throw new OwnershipException("Project is not yours");
-            //TODO
         }
 
         if (!ticket.getProject().equals(project)) {
@@ -85,15 +84,14 @@ public class TicketService {
     public TicketResponseDto updateTicketById(long projectId, long ticketId, TicketUpdateDto ticketDto, User user) throws ChangeSetPersister.NotFoundException {
         Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundException("Ticket not found"));
         Project project = this.projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException("Project not found"));
-        if (!(Objects.equals(project.getUser().getId(), user.getId()))) {
+        if (!(Objects.equals(project.getUser().getId(), user.getId())) && !Objects.equals(ticket.getAssignedUser().getId(), user.getId())) {
             throw new OwnershipException("Project is not yours");
         }
-//TODO
         if (!ticket.getProject().equals(project)) {
             throw new OwnershipException("Ticket does not belong to this project");
         }
 
-        ticket.setTitle(ticketDto.getTitle());
+        if(!Objects.equals(ticketDto.getTitle(), ticket.getTitle())) ticket.setTitle(ticketDto.getTitle());
         ticket.setStatus(ticketDto.getStatus());
         ticket.setPriority(ticketDto.getPriority());
         ticket.setAssignedUser(userRepository.getReferenceById(ticketDto.getUserId()));

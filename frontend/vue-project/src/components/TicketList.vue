@@ -48,5 +48,4 @@ function cancelEdit() {
 </script>
 
 <style scoped>
-/* můžete přidat styl pokud chceš */
 </style>

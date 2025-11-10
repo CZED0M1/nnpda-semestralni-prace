@@ -1,5 +1,6 @@
 package cz.upce.fei.nnpda_app.service;
 
+import cz.upce.fei.nnpda_app.dto.Ticket.AssignedTicketDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketRequestDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketResponseDto;
 import cz.upce.fei.nnpda_app.dto.Ticket.TicketUpdateDto;
@@ -20,6 +21,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -110,6 +112,20 @@ public class TicketService {
         ticketChangeRepository.save(change);
 
         return ticket.toDto();
+    }
+    public List<AssignedTicketDto> getAssignedTickets(User user) {
+        return ticketRepository.findAllByAssignedUserId(user.getId())
+                .stream()
+                .map(t -> new AssignedTicketDto(
+                        t.getId(),
+                        t.getTitle(),
+                        t.getStatus(),
+                        t.getPriority(),
+                        t.getUpdated(),
+                        t.getType(),
+                        t.getProject().getId()
+                ))
+                .collect(Collectors.toList());
     }
 }
 

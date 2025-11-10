@@ -16,7 +16,7 @@ function logout() {
 
     <nav>
       <RouterLink to="/projects">Projects</RouterLink>
-      <RouterLink to="/tickets">Tickets</RouterLink>
+      <RouterLink to="/tickets/assigned">Assigned Tickets</RouterLink>
 
       <button v-if="auth.token" @click="logout" class="logout-btn">Logout</button>
     </nav>

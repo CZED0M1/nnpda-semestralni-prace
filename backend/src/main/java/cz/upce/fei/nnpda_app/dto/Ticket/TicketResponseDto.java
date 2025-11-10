@@ -11,6 +11,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class TicketResponseDto {
@@ -20,7 +21,7 @@ public class TicketResponseDto {
     private TicketPriority priority;
     private TicketStatus status;
     private LocalDateTime updated;
-    private List<Comment> comments;
+    private List<CommentResponseDto> comments;
 
     private Long assignedUserId;
 
@@ -31,7 +32,11 @@ public class TicketResponseDto {
         this.priority = ticket.getPriority();
         this.status = ticket.getStatus();
         this.updated = ticket.getUpdated();
-        this.comments = ticket.getComments();
+        this.comments = ticket.getComments()
+                .stream()
+                .map(Comment::toResponseDto)
+                .toList();
+
 
         if (ticket.getAssignedUser() != null) {
             this.assignedUserId = ticket.getAssignedUser().getId();

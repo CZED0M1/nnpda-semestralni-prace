@@ -17,7 +17,7 @@
         <select v-model="localTicket.status">
           <option>OPEN</option>
           <option>IN_PROGRESS</option>
-          <option>CLOSED</option>
+          <option>DONE</option>
         </select>
       </div>
 

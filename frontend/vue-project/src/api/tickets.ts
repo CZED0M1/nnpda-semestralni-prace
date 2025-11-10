@@ -17,3 +17,6 @@ export const deleteTicket = (projectId: number, ticketId: number) =>
 
 export const getTicketChanges = (projectId: number, ticketId: number) =>
   api.get(`/projects/${projectId}/tickets/${ticketId}/changes`)
+export function getAssignedTickets() {
+  return api.get('projects/tickets/assigned')
+}

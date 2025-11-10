@@ -30,7 +30,7 @@ public class CommentController {
     @PostMapping("/projects/{projectId}/tickets/{ticketId}/comments")
     public ResponseEntity<CommentResponseDto> createTicketComment(@RequestBody CommentRequestDto commentRequestDto, @PathVariable long ticketId, @PathVariable String projectId) {
         User user =  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CommentResponseDto com = commentService.createCommentForProject(ticketId,commentRequestDto,user);
+        CommentResponseDto com = commentService.createCommentForTicket(ticketId,commentRequestDto,user);
         URI create = URI.create("/projects/"+projectId+"/tickets/"+ticketId+"/comments/" +com.getId());
         return ResponseEntity.created(create).body(com);
     }

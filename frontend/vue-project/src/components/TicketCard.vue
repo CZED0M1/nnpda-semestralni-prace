@@ -60,8 +60,8 @@ defineEmits<{
 }
 
 .status.open { background-color: #42b983; }
-.status.closed { background-color: #d9534f; }
-.status.inprogress { background-color: #f0ad4e; }
+.status.done { background-color: #d9534f; }
+.status.in_progress { background-color: #f0ad4e; }
 
 .priority.low { background-color: #5bc0de; }
 .priority.medium { background-color: #f0ad4e; }

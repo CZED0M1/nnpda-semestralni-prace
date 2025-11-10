@@ -10,6 +10,7 @@ import ChangePasswordView from '../views/ChangePasswordView.vue'
 import ProjectsListView from '../views/ProjectsListView.vue'
 import ProjectDetailView from '../views/ProjectDetailView.vue'
 import TicketDetailView from '../views/TicketDetailView.vue'
+import AsignedTicketsView from "@/views/AsignedTicketsView.vue";
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', component: LoginView },
@@ -27,7 +28,8 @@ const routes: RouteRecordRaw[] = [
 
   { path: '/projects/:projectId/tickets/:ticketId', component: TicketDetailView },
 
-  { path: '/', redirect: '/login' }
+  { path: '/', redirect: '/login' },
+  { path: '/tickets/assigned', component: AsignedTicketsView }
 ]
 
 const router = createRouter({

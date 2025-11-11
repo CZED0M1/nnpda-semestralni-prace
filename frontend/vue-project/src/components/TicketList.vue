@@ -1,5 +1,10 @@
 <template>
   <div>
+    <TicketGenerator
+      :project-id="projectId"
+      @ticket-created="tickets.push($event)"
+    />
+
     <TicketCard
       v-for="ticket in tickets"
       :key="ticket.id"
@@ -20,10 +25,12 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import TicketCard from './TicketCard.vue'
 import TicketForm from './TicketForm.vue'
+import TicketGenerator from "@/components/TicketGenerator.vue";
 
 const props = defineProps<{ tickets: any[], projectId: number }>()
 const emit = defineEmits<{

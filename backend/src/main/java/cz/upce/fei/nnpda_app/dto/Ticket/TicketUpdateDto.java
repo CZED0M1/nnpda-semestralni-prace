@@ -18,5 +18,5 @@ public class TicketUpdateDto {
 
         private TicketStatus status;
 
-        private long assignedUserId;
+        private Long assignedUserId;
 }

@@ -48,7 +48,14 @@ public class TicketService {
             throw new OwnershipException("Project is not yours");
         }
         Ticket ticket = ticketDto.toTicket();
-        ticket.setAssignedUser(userRepository.findById(ticketDto.getAssignedUserId()).orElseThrow(() -> new NotFoundException("User not found")));
+        if (ticketDto.getAssignedUserId() != null) {
+            ticket.setAssignedUser(
+                    userRepository.findById(ticketDto.getAssignedUserId())
+                            .orElseThrow(() -> new NotFoundException("User not found"))
+            );
+        } else {
+            ticket.setAssignedUser(null);
+        }
 
         ticket.setProject(project);
         ticketRepository.save(ticket);
@@ -98,7 +105,11 @@ public class TicketService {
         if(!Objects.equals(ticketDto.getTitle(), ticket.getTitle())) ticket.setTitle(ticketDto.getTitle());
         ticket.setStatus(ticketDto.getStatus());
         ticket.setPriority(ticketDto.getPriority());
-        ticket.setAssignedUser(userRepository.getUserById((ticketDto.getAssignedUserId())));
+        if (ticketDto.getAssignedUserId() != null ) {
+            ticket.setAssignedUser(userRepository.getUserById(ticketDto.getAssignedUserId()));
+        } else {
+            ticket.setAssignedUser(null);
+        }
         ticket.setUpdated(LocalDateTime.now());
 
         ticketRepository.save(ticket);
